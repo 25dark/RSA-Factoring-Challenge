@@ -1,33 +1,24 @@
 #!/usr/bin/python3
-"""Module that factorize as many numbers as possible
- into a product of two smaller numbers."""
-from sys import argv
+import sys
 
+def factorize(n):
+    # Try all possible factors from 2 to sqrt(n)
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
+            return i, n // i
+    # If no factor is found, return the number itself
+    return n, 1
 
-def factorize(value):
-    """"print a simple descomposition of an integer > 1"""
-    i = 2
+# Open the input file
+with open(sys.argv[1], 'r') as f:
+    # Read all the lines in the file
+    lines = f.readlines()
 
-    if value < 2:
-        return
-    print()
-    print(value, "<- value-bef")
-    while value % i:
-        i += 1
-    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
-    print(value, "<- value-aft")
-    print()
-
-if len(argv) != 2:
-    exit()
-
-try:
-    with open(argv[1]) as file:
-        line = file.readline()
-
-        while line != "":
-            value = int(line.split('\n')[0])
-            factorize(value)
-            line = file.readline()
-except:
-    pass
+# Iterate over the lines
+for line in lines:
+    # Parse the number from the line
+    n = int(line)
+    # Factorize the number
+    p, q = factorize(n)
+    # Print the result
+    print(f"{n}={p}*{q}")
