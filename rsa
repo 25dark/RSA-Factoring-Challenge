@@ -1,32 +1,33 @@
 #!/usr/bin/python3
-"""
-Factorize numbers in a file into a product of two prime numbers
-"""
-import sys
 
+import random
 
-def factorize():
-    """
-    A function to search file and factorize the given set of numbers into two prime numbers (format n = p*q)
-    """
-    try:
-        file = sys.argv[1]
-        with open(file) as f:
-            for line_number in f:
-                line_number = int(line_number)
-                if line_number % 2 == 0:
-                        print("{}={}*{}".format(line_number, line_number // 2, 2))
-                        continue
-                i = 3
-                while i < line_number // 2:
-                    if line_number % i == 0:
-                        print("{}={}*{}".format(line_number, line_number // i, i))
-                        break
-                    i = i + 2
-                if i == (line_number // 2) + 1:
-                    print("{}={}*{}".format(line_number, line_number, 1))
-    except (IndexError):
-        pass
+def pollard_rho(n):
+    # Choose a random number x in the range [2, n-2]
+    x = random.randint(2, n - 2)
+    # Choose a random number y in the range [2, n-2]
+    y = random.randint(2, n - 2)
+    # Set d to 1
+    d = 1
+    # While d is 1
+    while d == 1:
+        # Set x to (x^2 + y) % n
+        x = (x ** 2 + y) % n
+        # Set y to (y^2 + y) % n
+        y = (y ** 2 + y) % n
+        # Set y to (y^2 + y) % n
+        y = (y ** 2 + y) % n
+        # Calculate the greatest common divisor of |x - y| and n
+        d = gcd(abs(x - y), n)
+    # If d is equal to n, try again
+    if d == n:
+        return pollard_rho(n)
+    # Return d and n // d
+    return d, n // d
 
-
-factorize()
+def gcd(a, b):
+    # If b is 0, return a
+    if b == 0:
+        return a
+    # Return the greatest common divisor of b and a % b
+    return gcd(b, a % b)
